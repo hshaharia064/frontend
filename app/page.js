@@ -202,7 +202,7 @@ export default function Home() {
               }}
             >
               <img
-                src={student.image}
+                src={student.profile_pic}
                 alt={student.username}
                 style={{
                   width: "100%",
