@@ -27,20 +27,50 @@ export default function Home() {
   };
 
   // ── form submit handler — add your fetch logic here ──
-  const handleFormSubmit = (formData, id) => {
+  const handleFormSubmit = async(formData, id) => {
     if (formMode === "edit") {
       console.log("Update student:", id, formData);
       // TODO: your update fetch logic
     } else {
       console.log("Add student:", formData);
       // TODO: your add fetch logic
+      const token = localStorage.getItem('token')
+      const response = await fetch('http://localhost:5000/api/students',{
+        method : 'POST',
+        headers : {
+          'Authorization' : `Bearer ${token}`
+        },
+        body : formData
+      })
+      const data = await response.json()
+
+      if(!response.ok){
+        console.log('error adding student', data.message)
+      }
+      console.log('student added', data)
+      
+      handleFetchData()
     }
     setShowForm(false);
   };
 
-  const handleDelete = (id) => {
-    console.log("Delete student:", id);
+  const handleDelete = async(id) => {
     // TODO: your delete fetch logic
+    console.log("Delete student:", id);
+    const token = localStorage.getItem('token')
+    const res = await fetch(`http://localhost:5000/api/students/${id}`,{
+      method : 'DELETE',
+      headers : {
+        'Authorization' : `Bearer ${token}`
+      }
+    })
+    const dataRes = await res.json()
+    if(!res.ok){
+      console.log('could not delete the student', dataRes.message)
+    }
+    console.log('student deleted', dataRes)
+    handleFetchData()
+    
   };
   
 
@@ -229,7 +259,7 @@ export default function Home() {
                     color: "var(--foreground)",
                   }}
                 >
-                  {student.username}
+                  {student.first_name + ' ' + student.last_name}
                 </h2>
                 <p
                   style={{
@@ -408,7 +438,7 @@ export default function Home() {
                     margin: "0 0 1.2rem",
                   }}
                 >
-                  @{viewingStudent.username}
+                  {viewingStudent.username}
                 </p>
               )}
 
@@ -423,6 +453,7 @@ export default function Home() {
 
               <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 {[
+                  { icon: "👤", label: "Name", value: viewingStudent.first_name + ' ' + viewingStudent.last_na },
                   { icon: "✉️", label: "Email", value: viewingStudent.email },
                   { icon: "📞", label: "Phone", value: viewingStudent.phone },
                   {
