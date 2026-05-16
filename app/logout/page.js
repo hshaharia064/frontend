@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LogoutPage() {
+  const router = useRouter();
   const handleLogout = () => {
-    // TODO: add your fetch logout logic here
+    localStorage.removeItem("token");
+    router.push("/login");
   };
 
   return (
@@ -26,7 +29,8 @@ export default function LogoutPage() {
           width: "300px",
           height: "300px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,77,106,0.1), transparent 70%)",
+          background:
+            "radial-gradient(circle, rgba(255,77,106,0.1), transparent 70%)",
           top: "-80px",
           right: "-80px",
           pointerEvents: "none",
@@ -81,11 +85,18 @@ export default function LogoutPage() {
             lineHeight: 1.6,
           }}
         >
-          Are you sure you want to log out? You&apos;ll need to sign in again to access your profile.
+          Are you sure you want to log out? You&apos;ll need to sign in again to
+          access your profile.
         </p>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-          <button onClick={handleLogout} className="btn-danger" style={{ width: "100%" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+        >
+          <button
+            onClick={handleLogout}
+            className="btn-danger"
+            style={{ width: "100%" }}
+          >
             Yes, log me out
           </button>
 
